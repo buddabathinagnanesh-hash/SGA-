@@ -1,0 +1,45 @@
+I/O Investigation Report
+
+Commands executed and outputs:
+
+Command: rm -f app.log stdout.txt stderr.txt combined.txt
+Result: Removed any prior log and redirection output files.
+
+Command: echo "sample log line" > app.log
+Result: Created app.log with a sample log entry.
+
+Command: lsof | head -n 20
+Output: Displayed the first 20 open files on the system, including shell and process file descriptors.
+
+Command: exec 3<app.log
+Result: Opened app.log on file descriptor 3 for the shell.
+
+Command: lsof -p $$ | grep app.log
+Output: Confirmed bash had file descriptor 3 open on /workspaces/SGA-/q4/app.log.
+
+Command: ls -l /proc/$$/fd | grep app.log
+Output: Showed file descriptor 3 points to /workspaces/SGA-/q4/app.log.
+
+Command: ls -l /proc/$$/fd
+Output: Listed active file descriptors for the current shell, including 0, 1, 2, 3, 30, and 255.
+
+Command: ls -l > stdout.txt
+Result: Redirected standard output of ls into stdout.txt.
+
+Command: ls /not_a_real_path 2> stderr.txt
+Result: Redirected error output to stderr.txt while the command failed.
+
+Command: (ls -l && ls /not_a_real_path) > combined.txt 2>&1
+Result: Redirected both stdout and stderr into combined.txt.
+
+Command: ulimit -a
+Output: Displayed shell resource limits, including open files limit of 524288.
+
+Command: exec 3<&-
+Result: Closed file descriptor 3.
+
+Observations:
+- The shell opened app.log on descriptor 3 via exec 3<app.log.
+- /proc/$$/fd confirmed the file descriptor mapping and that the shell had the file open.
+- Output redirection separated stdout and stderr into different files, and combined redirection placed both streams into one file.
+- ulimit showed the current process resource limits and confirmed Linux manages file I/O through file descriptors and process limits.

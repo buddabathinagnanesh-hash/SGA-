@@ -1,0 +1,39 @@
+Environment Verification Report
+
+Question 1 output and observations:
+
+Command: whoami
+Output:
+ codespace
+
+Command: groups
+Output:
+ codespace pipx python oryx golang docker sdkman rvm php conda nvs nvm hugo ssh
+
+Command: echo "$SHELL"
+Output:
+ /bin/bash
+
+Command: pwd
+Output:
+ /workspaces/SGA-
+
+Command: ls -ls
+Output:
+ total 24
+ 4 -rw-rw-rw-  1 codespace root         6 Jul  3 15:34 README.md
+ 4 drwxrwxrwx+ 2 codespace codespace 4096 Jul  3 15:35 q1
+ 4 drwxrwxrwx+ 2 codespace codespace 4096 Jul  3 15:35 q2
+ 4 drwxrwxrwx+ 2 codespace codespace 4096 Jul  3 15:35 q3
+ 4 drwxrwxrwx+ 2 codespace codespace 4096 Jul  3 15:35 q4
+ 4 drwxrwxrwx+ 2 codespace codespace 4096 Jul  3 15:36 q5
+
+Command: curl -s --max-time 10 https://facebook.com > /dev/null && echo "Network: facebook.com reachable"
+Output:
+ Network: facebook.com reachable
+
+Summary:
+- The current Linux account is codespace and belongs to multiple groups used for development tools.
+- The current shell is /bin/bash and the present working directory is /workspaces/SGA-.
+- The workspace contains README.md and question folders q1 through q5.
+- Network connectivity to facebook.com was successfully verified.

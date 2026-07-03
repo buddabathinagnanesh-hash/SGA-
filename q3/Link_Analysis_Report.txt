@@ -1,0 +1,62 @@
+Link Analysis Report
+
+Commands executed and outputs:
+
+Command: rm -f original.txt hardlink.txt symlink.txt
+Result: Removed any previous test files.
+
+Command: echo "Linux link test file" > original.txt
+Result: Created original.txt with sample content.
+
+Command: ln original.txt hardlink.txt
+Result: Created a hard link named hardlink.txt to the same inode as original.txt.
+
+Command: ln -s original.txt symlink.txt
+Result: Created a symbolic link named symlink.txt pointing to original.txt.
+
+Command: ls -li
+Output:
+ total 8
+ 1310805 -rw-rw-rw- 2 codespace codespace 21 Jul  3 15:48 hardlink.txt
+ 1310805 -rw-rw-rw- 2 codespace codespace 21 Jul  3 15:48 original.txt
+ 1310806 lrwxrwxrwx 1 codespace codespace 12 Jul  3 15:49 symlink.txt -> original.txt
+
+Command: stat original.txt hardlink.txt symlink.txt
+Output:
+ original.txt: inode 1310805, links 2, regular file, permissions 0666
+ hardlink.txt: inode 1310805, links 2, regular file, permissions 0666
+ symlink.txt: inode 1310806, links 1, symbolic link, permissions 0777
+
+Command: cat original.txt
+Output:
+ Linux link test file
+
+Command: cat hardlink.txt
+Output:
+ Linux link test file
+
+Command: cat symlink.txt
+Output:
+ Linux link test file
+
+Command: rm original.txt
+Result: Removed the original file name while leaving the hard link and symlink.
+
+Command: ls -li
+Output:
+ total 4
+ 1310805 -rw-rw-rw- 1 codespace codespace 21 Jul  3 15:48 hardlink.txt
+ 1310806 lrwxrwxrwx 1 codespace codespace 12 Jul  3 15:49 symlink.txt -> original.txt
+
+Command: cat hardlink.txt
+Output:
+ Linux link test file
+
+Command: cat symlink.txt
+Output:
+ cat: symlink.txt: No such file or directory
+
+Conclusions:
+- The hard link and original file shared inode 1310805. After deleting original.txt, hardlink.txt remained accessible because the file data still had a link count of 1.
+- The symbolic link had a different inode (1310806) and depended on the pathname original.txt. When the target was removed, the symbolic link became broken.
+- Hard links are alternate directory entries to the same inode, while symlinks store a path to the target file.
